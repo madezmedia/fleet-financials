@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mad EZ Media — Fleet Financial Birdseye</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #14141d;
+    --surface2: #1c1c2a;
+    --border: #2a2a3e;
+    --text: #e0e0ee;
+    --text2: #8888aa;
+    --red: #ff4466;
+    --orange: #ff8833;
+    --yellow: #ffcc33;
+    --green: #33dd77;
+    --blue: #4488ff;
+    --purple: #9966ff;
+    --teal: #33ddbb;
+    --pink: #ff66aa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 0;
+  }
+  .header {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle { color: var(--text2); font-size: 1rem; }
+  .header .date-badge {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    background: var(--surface2);
+    color: var(--text2);
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+  }
+  .summary-ribbon {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+  .summary-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text2); margin-bottom: 0.3rem; }
+  .summary-card .value { font-size: 1.8rem; font-weight: 700; }
+  .summary-card .note { font-size: 0.7rem; color: var(--text2); margin-top: 0.2rem; }
+  .summary-card.danger .value { color: var(--red); }
+  .summary-card.warning .value { color: var(--orange); }
+  .summary-card.ok .value { color: var(--green); }
+  .summary-card.info .value { color: var(--blue); }
+  .summary-card.revenue .value { color: var(--teal); }
+  .summary-card.upgrade .value { color: var(--purple); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; }
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .filter-btn {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: var(--blue); color: var(--text); }
+  .filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  h2 .count-badge {
+    font-size: 0.7rem;
+    background: var(--surface2);
+    padding: 0.15rem 0.6rem;
+    border-radius: 10px;
+    color: var(--text2);
+    font-weight: 400;
+  }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .service-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .service-card:hover { border-color: var(--blue); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .service-card .top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+  .service-card .name { font-weight: 600; font-size: 1rem; }
+  .service-card .cost { font-weight: 700; font-size: 1.1rem; }
+  .service-card .cost.overdue { color: var(--red); }
+  .service-card .cost.warning { color: var(--orange); }
+  .service-card .cost.ok { color: var(--green); }
+  .service-card .cost.free { color: var(--teal); }
+  .service-card .cost.desired { color: var(--purple); }
+  .service-card .tags { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+  }
+  .tag.overdue { background: rgba(255,68,102,0.15); color: var(--red); border: 1px solid rgba(255,68,102,0.3); }
+  .tag.active { background: rgba(68,136,255,0.15); color: var(--blue); border: 1px solid rgba(68,136,255,0.3); }
+  .tag.free-tier { background: rgba(51,221,119,0.15); color: var(--green); border: 1px solid rgba(51,221,119,0.3); }
+  .tag.ai { background: rgba(153,102,255,0.15); color: var(--purple); border: 1px solid rgba(153,102,255,0.3); }
+  .tag.infra { background: rgba(51,221,187,0.15); color: var(--teal); border: 1px solid rgba(51,221,187,0.3); }
+  .tag.domain { background: rgba(255,204,51,0.15); color: var(--yellow); border: 1px solid rgba(255,204,51,0.3); }
+  .tag.estimated { background: rgba(255,102,170,0.15); color: var(--pink); border: 1px solid rgba(255,102,170,0.3); }
+  .tag.confirmed { background: rgba(51,221,187,0.15); color: var(--teal); border: 1px solid rgba(51,221,187,0.3); }
+  .tag.critical { background: rgba(255,68,102,0.2); color: #ff2255; border: 1px solid rgba(255,68,102,0.4); }
+  .tag.closed { background: rgba(136,136,170,0.15); color: var(--text2); border: 1px solid rgba(136,136,170,0.3); }
+  .tag.desired { background: rgba(153,102,255,0.2); color: var(--purple); border: 1px solid rgba(153,102,255,0.4); }
+  .tag.product { background: rgba(51,221,187,0.15); color: var(--teal); border: 1px solid rgba(51,221,187,0.3); }
+  .service-card .desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .service-card .features { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border); }
+  .service-card .features .feat-item { font-size: 0.78rem; color: var(--text2); padding: 0.15rem 0; padding-left: 1rem; position: relative; }
+  .service-card .features .feat-item::before { content: "▸"; position: absolute; left: 0; color: var(--blue); }
+  .inline-chart {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+  }
+  .bar-chart { display: flex; flex-direction: column; gap: 0.5rem; }
+  .bar-row { display: flex; align-items: center; gap: 0.8rem; }
+  .bar-label { min-width: 150px; font-size: 0.8rem; color: var(--text2); text-align: right; }
+  .bar-track { flex: 1; height: 24px; background: var(--bg); border-radius: 4px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; display: flex; align-items: center; padding-left: 6px; }
+  .bar-fill .bar-val { font-size: 0.7rem; font-weight: 600; color: #fff; white-space: nowrap; }
+  .bar-fill.overdue-fill { background: linear-gradient(90deg, var(--red), #ff2244); }
+  .bar-fill.active-fill { background: linear-gradient(90deg, var(--blue), #3366dd); }
+  .bar-fill.free-fill { background: linear-gradient(90deg, var(--teal), #22bb99); }
+  .bar-fill.optimized-fill { background: linear-gradient(90deg, var(--green), #22cc66); }
+  .bar-fill.desired-fill { background: linear-gradient(90deg, var(--purple), #7744dd); }
+  .opt-section { margin-top: 2rem; }
+  .opt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--blue);
+  }
+  .opt-card.p0 { border-left-color: var(--red); }
+  .opt-card.p1 { border-left-color: var(--orange); }
+  .opt-card.p2 { border-left-color: var(--yellow); }
+  .opt-card.p3 { border-left-color: var(--teal); }
+  .opt-card .opt-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
+  .opt-card .opt-title { font-weight: 600; }
+  .opt-card .opt-savings { font-weight: 700; color: var(--green); font-size: 0.9rem; }
+  .opt-card .opt-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .opt-card .opt-tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 0.3rem;
+  }
+  .opt-card .opt-tag.p0-tag { background: rgba(255,68,102,0.15); color: var(--red); border: 1px solid rgba(255,68,102,0.3); }
+  .opt-card .opt-tag.p1-tag { background: rgba(255,136,51,0.15); color: var(--orange); border: 1px solid rgba(255,136,51,0.3); }
+  .opt-card .opt-tag.p2-tag { background: rgba(255,204,51,0.15); color: var(--yellow); border: 1px solid rgba(255,204,51,0.3); }
+  .opt-card .opt-tag.p3-tag { background: rgba(51,221,187,0.15); color: var(--teal); border: 1px solid rgba(51,221,187,0.3); }
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .comparison-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+  }
+  .comparison-card.current { border-color: var(--red); }
+  .comparison-card.optimized { border-color: var(--green); }
+  .comparison-card.fullstack { border-color: var(--purple); }
+  .revenue-list { list-style: none; }
+  .revenue-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+  }
+  .revenue-list li:last-child { border: none; }
+  .revenue-list .rev-amount { font-weight: 600; color: var(--teal); }
+  .revenue-list .rev-note { color: var(--text2); font-size: 0.75rem; }
+  .desired-stack { background: var(--surface); border: 2px solid var(--purple); border-radius: 12px; padding: 1.5rem; margin: 2rem 0; }
+  .desired-stack h3 { color: var(--purple); margin-bottom: 1rem; }
+  .desired-stack .ds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.8rem; }
+  .desired-stack .ds-item { padding: 0.8rem; background: var(--surface2); border-radius: 8px; }
+  .desired-stack .ds-item .ds-name { font-weight: 600; color: var(--text); }
+  .desired-stack .ds-item .ds-cost { color: var(--purple); font-weight: 700; }
+  .desired-stack .ds-item .ds-desc { font-size: 0.75rem; color: var(--text2); margin-top: 0.2rem; }
+  .nav-links { display: flex; gap: 1rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap; }
+  .nav-links a {
+    color: var(--blue);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover { border-color: var(--blue); background: rgba(68,136,255,0.1); }
+  @media (max-width: 700px) {
+    .header { padding: 2rem 1rem 1.5rem; }
+    .header h1 { font-size: 1.5rem; }
+    .container { padding: 1rem; }
+    .service-grid { grid-template-columns: 1fr; }
+    .summary-ribbon { grid-template-columns: 1fr 1fr; padding: 1rem; }
+    .comparison-grid { grid-template-columns: 1fr; }
+    .bar-label { min-width: 100px; font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔥 Mad EZ Media — Fleet Financial Birdseye</h1>
+  <div class="subtitle">Complete Fleet Cost Analysis · Overdue Invoices · Monthly Burn · Full Desired Stack</div>
+  <div class="date-badge">📊 Updated June 13, 2026 · Data: Email (May 11–19), ACMI Fleet, Config Files</div>
+</div>
+
+<div class="nav-links">
+  <a href="index.html">📊 Dashboard Home</a>
+  <a href="sonicbrand-cost-breakdown.html">🎵 SonicBrand Costs</a>
+  <a href="ez360-cost-breakdown.html">⭐ EZ Influencer 360 Costs</a>
+</div>
+
+<div class="summary-ribbon" id="summaryRibbon">
+  <div class="summary-card danger">
+    <div class="label">Total Overdue</div>
+    <div class="value">~$200</div>
+    <div class="note">Vercel + Supabase + Claude + past-due items</div>
+  </div>
+  <div class="summary-card warning">
+    <div class="label">Current Burn</div>
+    <div class="value">$~450</div>
+    <div class="note">AI + infra + subs (GCP closed)</div>
+  </div>
+  <div class="summary-card upgrade">
+    <div class="label">Desired Stack</div>
+    <div class="value">$~715</div>
+    <div class="note">All upgrades + full plans</div>
+  </div>
+  <div class="summary-card info">
+    <div class="label">Services Tracked</div>
+    <div class="value">28</div>
+    <div class="note">18 active · 10 supporting</div>
+  </div>
+  <div class="summary-card revenue">
+    <div class="label">Monthly Revenue</div>
+    <div class="value">$~200–400</div>
+    <div class="note">Whop + Square (irregular)</div>
+  </div>
+  <div class="summary-card warning">
+    <div class="label">Square Loan</div>
+    <div class="value">$543</div>
+    <div class="note">Due Jul 3 · $37.04/mo min</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="controls" id="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="overdue">🔴 Overdue</button>
+    <button class="filter-btn" data-filter="desired">💜 Desired</button>
+    <button class="filter-btn" data-filter="ai">🧠 AI/LLM</button>
+    <button class="filter-btn" data-filter="infra">☁️ Infrastructure</button>
+    <button class="filter-btn" data-filter="product">📦 Products</button>
+    <button class="filter-btn" data-filter="free">🆓 Free</button>
+  </div>
+
+  <!-- ============ KEY CORRECTIONS ============ -->
+  <h2>📝 Corrections Applied</h2>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem;">
+    <ul style="list-style:none;font-size:0.85rem;color:var(--text2);line-height:1.8;">
+      <li>✅ <strong>Google Cloud billing account CLOSED</strong> — removed from burn calculation</li>
+      <li>✅ <strong>Total overdue corrected to ~$200</strong> (was ~$290+)</li>
+      <li>✅ <strong>Claude: $125 Starter / $250 Max plans</strong> — targeting $250/mo</li>
+      <li>✅ <strong>Grok Premium: $100/mo</strong> — added to desired stack</li>
+      <li>✅ <strong>Codex Pro: $100/mo</strong> — added to desired stack</li>
+      <li>✅ <strong>Google Maps API</strong> — added to infrastructure costs</li>
+    </ul>
+  </div>
+
+  <!-- ============ DESIRED FULL STACK ============ -->
+  <h2>💜 The Full Fleet Stack — Desired</h2>
+  <p style="color:var(--text2);font-size:0.85rem;margin-bottom:1rem;">
+    This is the ideal monthly configuration with all upgrades. For someone covering costs, this is the ask.
+  </p>
+
+  <div class="desired-stack">
+    <h3>🚀 Mad EZ Media — Full Stack Monthly ($715/mo)</h3>
+    <div class="ds-grid">
+      <div class="ds-item">
+        <div class="ds-cost">$250</div>
+        <div class="ds-name">Claude Max</div>
+        <div class="ds-desc">Anthropic Claude Max plan — Primary coding + reasoning agent. Covers claude-engineer, claude-code, claude-desktop, claude-web. The brain of the fleet.</div>
+      </div>
+      <div class="ds-item">
+        <div class="ds-cost">$100</div>
+        <div class="ds-name">xAI Grok Premium</div>
+        <div class="ds-desc">Grok Premium — Influencer Fleet Orchestrator. Folana content pipeline, image gen, video gen, web research, vision analysis.</div>
+      </div>
+      <div class="ds-item">
+        <div class="ds-cost">$100</div>
+        <div class="ds-name">OpenAI Codex Pro</div>
+        <div class="ds-desc">Codex Pro Plan — OSS contributions, coding automation, API integrations. Org: mad-ez-media.</div>
+      </div>
+      <div class="ds-item">
+        <div class="ds-cost">~$80</div>
+        <div class="ds-name">Infrastructure</div>
+        <div class="ds-desc">Vercel Hobby + Upstash Redis/Vector + Supabase Free + Google Maps APIs (~$20 for Geocoding/Places). Cloud hosting backbone.</div>
+      </div>
+      <div class="ds-item">
+        <div class="ds-cost">~$50</div>
+        <div class="ds-name">MiniMax Plus</div>
+        <div class="ds-desc">Folana character-consistent image gen, music-2.6, speech-2.8-hd. CRITICAL — no other provider matches Folana consistency.</div>
+      </div>
+      <div class="ds-item">
+        <div class="ds-cost">~$60</div>
+        <div class="ds-name">Z.AI GLM Lite + FAL + ElevenLabs</div>
+        <div class="ds-desc">Z.AI lite (~$30) for orchestrator backbone, FAL flux-pro (~$20) for design assets, ElevenLabs (~$10) for voice synthesis. Supporting AI stack.</div>
+      </div>
+      <div class="ds-item">
+        <div class="ds-cost">~$55</div>
+        <div class="ds-name">Domains + Subscriptions</div>
+        <div class="ds-desc">10 domains ($~45) + RapidAPI ($10) + misc subscriptions. All web properties.</div>
+      </div>
+      <div class="ds-item" style="background:rgba(51,221,119,0.1);border:1px solid rgba(51,221,119,0.3);">
+        <div class="ds-cost" style="color:var(--green);">$0</div>
+        <div class="ds-name">GPU + Free Tier Services</div>
+        <div class="ds-desc">MI300X GPU (sunk cost), DeepSeek/OpenCode Go (free tier), Groq (free tier), Neon DB (free), AgentMail (free), Resend (free). Zero marginal cost services.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ OVERDUE ============ -->
+  <h2>🔴 Overdue Invoices <span class="count-badge">~$200 total</span></h2>
+  <div class="service-grid">
+    <div class="service-card" data-tags="overdue infra confirmed">
+      <div class="top-row"><span class="name">Vercel (Mad EZ Media)</span><span class="cost overdue">$88.79/mo</span></div>
+      <div class="tags"><span class="tag overdue">OVERDUE</span><span class="tag infra">INFRA</span><span class="tag confirmed">CONFIRMED</span></div>
+      <div class="desc">Team plan with Supabase integration. 6 failed payment attempts on Amex 6347. Hosting: ACMI product, Folana, EZ360, GSD dashboard.</div>
+      <div class="features">
+        <div class="feat-item">$68.79 Supabase integration + $20 pro plan</div>
+        <div class="feat-item">❌ 6 failed attempts — service at suspension risk</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="overdue infra confirmed">
+      <div class="top-row"><span class="name">Supabase</span><span class="cost overdue">$68.79/mo</span></div>
+      <div class="tags"><span class="tag overdue">OVERDUE</span><span class="tag infra">INFRA</span><span class="tag confirmed">CONFIRMED</span></div>
+      <div class="desc">Invoice IUZTLA-00028 OVERDUE. Primary DB for folana-journal, ACMI console, AI Music Academy. 3 projects running.</div>
+      <div class="features">
+        <div class="feat-item">Pro plan with PostgreSQL + Auth + Realtime + Storage</div>
+        <div class="feat-item">💡 Check free tier eligibility (under 500MB?)</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="overdue ai confirmed">
+      <div class="top-row"><span class="name">Anthropic / Claude</span><span class="cost overdue">$100/mo</span></div>
+      <div class="tags"><span class="tag overdue">OVERDUE</span><span class="tag ai">AI LLM</span><span class="tag critical">CRITICAL</span></div>
+      <div class="desc">Subscription PAUSED — payment failed. Recurring P1 outage for fleet (17+ hours autonomic loops down).</div>
+      <div class="features">
+        <div class="feat-item">⚠️ acmi-p1-anthropic-credit-exhaustion — known fleet issue</div>
+        <div class="feat-item">💡 Upgrading to $125 or $250/mo plan</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="overdue ai confirmed">
+      <div class="top-row"><span class="name">OpenAI / ChatGPT Plus</span><span class="cost overdue">$20/mo</span></div>
+      <div class="tags"><span class="tag overdue">OVERDUE</span><span class="tag ai">AI LLM</span></div>
+      <div class="desc">Final reminder sent May 18 — payment failed, access ending. Codex API still active via separate key.</div>
+    </div>
+    <div class="service-card" data-tags="overdue overdue">
+      <div class="top-row"><span class="name">Google Google Cloud (Closed)</span><span class="cost free">CLOSED</span></div>
+      <div class="tags"><span class="tag closed">CLOSED</span></div>
+      <div class="desc">Billing account closed. No longer a cost factor. GCP project `mad-ez-media-and-technology` is inactive for billing purposes.</div>
+    </div>
+    <div class="service-card" data-tags="overdue overdue">
+      <div class="top-row"><span class="name">Apple Music</span><span class="cost overdue">$10.99/mo</span></div>
+      <div class="tags"><span class="tag overdue">OVERDUE</span></div>
+      <div class="desc">Billing problem. Personal — not business critical.</div>
+    </div>
+  </div>
+
+  <!-- ============ CURRENT STACK ============ -->
+  <h2>📊 Current vs Desired Monthly</h2>
+  <div class="inline-chart">
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">Current Burn</div>
+        <div class="bar-track"><div class="bar-fill overdue-fill" style="width:63%"><span class="bar-val">$450/mo</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Desired Stack</div>
+        <div class="bar-track"><div class="bar-fill desired-fill" style="width:100%"><span class="bar-val">$715/mo</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Revenue Offset</div>
+        <div class="bar-track"><div class="bar-fill free-fill" style="width:42%"><span class="bar-val">$200–400/mo</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="comparison-grid">
+    <div class="comparison-card current">
+      <div style="color:var(--red);font-size:0.75rem;text-transform:uppercase;margin-bottom:0.5rem;">Current Burn (~$450/mo)</div>
+      <div style="font-size:0.85rem;color:var(--text2);line-height:1.7;">
+        <strong style="color:var(--orange);">$200</strong> Anthropic Claude (PAUSED)<br>
+        <strong style="color:var(--orange);">$50</strong> MiniMax Plus<br>
+        <strong style="color:var(--orange);">$30</strong> Z.AI GLM Lite<br>
+        <strong style="color:var(--orange);">$30</strong> xAI Grok Lite<br>
+        <strong style="color:var(--orange);">$30</strong> FAL AI (usage)<br>
+        <strong style="color:var(--orange);">$22</strong> ElevenLabs<br>
+        <strong style="color:var(--blue);">$88</strong> Vercel Pro<br>
+        <strong style="color:var(--blue);">$35</strong> Upstash Redis+Vector<br>
+        <strong style="color:var(--blue);">$20</strong> Google Maps APIs<br>
+        <strong style="color:var(--blue);">$10</strong> RunPod<br>
+        <strong style="color:var(--green);">$55</strong> Domains + misc subs
+      </div>
+    </div>
+    <div class="comparison-card fullstack">
+      <div style="color:var(--purple);font-size:0.75rem;text-transform:uppercase;margin-bottom:0.5rem;">Desired Full Stack (~$715/mo)</div>
+      <div style="font-size:0.85rem;color:var(--text2);line-height:1.7;">
+        <strong style="color:var(--purple);">$250</strong> Claude Max ← NEW upgrade<br>
+        <strong style="color:var(--purple);">$100</strong> Grok Premium ← NEW upgrade<br>
+        <strong style="color:var(--purple);">$100</strong> Codex Pro ← NEW upgrade<br>
+        <strong style="color:var(--purple);">$50</strong> MiniMax Plus<br>
+        <strong style="color:var(--purple);">$30</strong> Z.AI GLM Lite<br>
+        <strong style="color:var(--purple);">$15</strong> ElevenLabs (usage adjusted)<br>
+        <strong style="color:var(--purple);">$5</strong> FAL AI (pay-per-use)<br>
+        <strong style="color:var(--blue);">$20</strong> Vercel Hobby (downgraded)<br>
+        <strong style="color:var(--blue);">$35</strong> Upstash Redis+Vector<br>
+        <strong style="color:var(--blue);">$20</strong> Google Maps APIs<br>
+        <strong style="color:var(--green);">$55</strong> Domains + misc subs<br>
+        <strong style="color:var(--green);">$0</strong> RunPod (MI300X)<br>
+        <strong style="color:var(--green);">$0</strong> Supabase Free
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ AI/LLM DEEP DIVE ============ -->
+  <h2>🧠 AI/LLM Providers <span class="count-badge">Current + Desired</span></h2>
+  <div class="service-grid">
+    <div class="service-card" data-tags="ai desired">
+      <div class="top-row"><span class="name">Anthropic Claude Max</span><span class="cost desired">$250/mo</span></div>
+      <div class="tags"><span class="tag ai">AI LLM</span><span class="tag desired">DESIRED</span><span class="tag confirmed">CORE</span></div>
+      <div class="desc"><strong>Desired upgrade.</strong> Claude Max ($250/mo) — primary coding + reasoning agent for entire fleet. Covers claude-engineer, claude-code, claude-desktop, claude-cowork, claude-web. $125 Starter alternative available.</div>
+      <div class="features">
+        <div class="feat-item">✅ Best-in-class coding (Claude Sonnet 4/4.5/Opus)</div>
+        <div class="feat-item">✅ Claude Code CLI for interactive sessions</div>
+        <div class="feat-item">✅ 6+ agents across fleet rely on Claude</div>
+        <div class="feat-item">⚠️ $125 Starter available as fallback if $250 is too much</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="ai desired">
+      <div class="top-row"><span class="name">xAI Grok Premium</span><span class="cost desired">$100/mo</span></div>
+      <div class="tags"><span class="tag ai">AI LLM</span><span class="tag desired">DESIRED</span></div>
+      <div class="desc"><strong>Desired upgrade from Lite.</strong> Grok Premium ($100/mo) — Influencer Fleet Orchestrator. Folana content pipeline, image gen (grok-imagine), video gen, web research, vision analysis. Manages 4 sub-agents.</div>
+      <div class="features">
+        <div class="feat-item">✅ Higher rate limits vs Lite plan</div>
+        <div class="feat-item">✅ grok-4.3 for chat, grok-4.20-reasoning for hard tasks</div>
+        <div class="feat-item">✅ Manages: folana, folana-journal, artist-factory-agent, fanvue</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="ai desired">
+      <div class="top-row"><span class="name">OpenAI Codex Pro</span><span class="cost desired">$100/mo</span></div>
+      <div class="tags"><span class="tag ai">AI LLM</span><span class="tag desired">DESIRED</span></div>
+      <div class="desc"><strong>Desired upgrade.</strong> Codex Pro plan ($100/mo) — OSS contributions, coding automation, API integrations. Current Codex API has Org account (mad-ez-media) but needs paid plan for full access.</div>
+      <div class="features">
+        <div class="feat-item">✅ Full Codex API access for automation</div>
+        <div class="feat-item">✅ GPT-5.4 model access</div>
+        <div class="feat-item">✅ Agent: codex, opencode-task-driver (gpt-5.4)</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="ai active">
+      <div class="top-row"><span class="name">MiniMax Plus</span><span class="cost warning">~$50/mo</span></div>
+      <div class="tags"><span class="tag ai">AI + MEDIA</span><span class="tag active">ACTIVE</span></div>
+      <div class="desc">CRITICAL for Folana character consistency. M2.7, M3 multimodal, music-2.6, image-01 w/ subject-ref. ONLY provider that maintains Folana character identity.</div>
+      <div class="features">
+        <div class="feat-item">Music-2.6 unlimited, image-01 50/day, speech 4K/day</div>
+        <div class="feat-item">✅ Character consistency via subject-ref — NO other provider</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="ai active">
+      <div class="top-row"><span class="name">Z.AI GLM Lite</span><span class="cost warning">~$30/mo</span></div>
+      <div class="tags"><span class="tag ai">AI LLM</span><span class="tag active">ACTIVE</span></div>
+      <div class="desc">Fleet orchestrator backbone. glm-4.5→5.1. Lite plan: ~80 prompts/5h, ~400/week. bentley-main, hermes-agent, fleet all run on this.</div>
+      <div class="features">
+        <div class="feat-item">MCP tools: web-search-prime, web-reader, vision, zread</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="ai active">
+      <div class="top-row"><span class="name">FAL AI</span><span class="cost warning">~$30/mo</span></div>
+      <div class="tags"><span class="tag ai">AI MEDIA</span><span class="tag active">ACTIVE</span></div>
+      <div class="desc">Recraft + flux-pro for design assets. Design-agency agents use this for image generation. Can reduce to pay-per-use if needed.</div>
+    </div>
+    <div class="service-card" data-tags="ai active">
+      <div class="top-row"><span class="name">ElevenLabs</span><span class="cost warning">~$22/mo</span></div>
+      <div class="tags"><span class="tag ai">VOICE</span><span class="tag active">ACTIVE</span></div>
+      <div class="desc">Voice synthesis for Folana narration, sonic-branding. Aurora voice (speed 0.95). Key duplicated across 10+ .env files — needs consolidation.</div>
+    </div>
+    <div class="service-card" data-tags="ai free">
+      <div class="top-row"><span class="name">DeepSeek (OpenCode Go)</span><span class="cost free">$0</span></div>
+      <div class="tags"><span class="tag ai">AI LLM</span><span class="tag free-tier">FREE</span></div>
+      <div class="desc">Current primary coding runtime (this session). deepseek-v4-flash via OpenCode Go platform. Free tier with generous limits.</div>
+    </div>
+    <div class="service-card" data-tags="ai free">
+      <div class="top-row"><span class="name">RunPod GPU (MI300X)</span><span class="cost free">$0 sunk</span></div>
+      <div class="tags"><span class="tag ai">GPU</span><span class="tag free-tier">SUNK</span></div>
+      <div class="desc">4 self-hosted models (llama3.3:70b, qwen2.5:32b, mistral-small:24b, qwen2.5-7b). Zero marginal cost while GPU is online.</div>
+    </div>
+  </div>
+
+  <!-- ============ INFRASTRUCTURE ============ -->
+  <h2>☁️ Infrastructure <span class="count-badge">8 services</span></h2>
+  <div class="service-grid">
+    <div class="service-card" data-tags="infra overdue">
+      <div class="top-row"><span class="name">Vercel</span><span class="cost overdue">$88.79/mo</span></div>
+      <div class="tags"><span class="tag infra">CLOUD</span><span class="tag overdue">OVERDUE</span></div>
+      <div class="desc">Pro plan hosting ACMI, Folana, EZ360, GSD dashboard. Can downgrade to Hobby ($20/mo) and move static sites to Cloudflare.</div>
+    </div>
+    <div class="service-card" data-tags="infra overdue">
+      <div class="top-row"><span class="name">Supabase</span><span class="cost overdue">$68.79/mo</span></div>
+      <div class="tags"><span class="tag infra">DB</span><span class="tag overdue">OVERDUE</span></div>
+      <div class="desc">Invoice IUZTLA-00028 overdue. 3 projects. 💡 Check free tier eligibility — Pro plan may not be needed.</div>
+    </div>
+    <div class="service-card" data-tags="infra active">
+      <div class="top-row"><span class="name">Upstash (Redis + Vector)</span><span class="cost warning">~$35/mo</span></div>
+      <div class="tags"><span class="tag infra">DB</span><span class="tag active">ACTIVE</span></div>
+      <div class="desc">Fleet backbone. Redis for ACMI timeline, Vector for semantic search. 2 projects (primary + secondary).</div>
+    </div>
+    <div class="service-card" data-tags="infra active">
+      <div class="top-row"><span class="name">Google Maps API</span><span class="cost warning">~$20/mo</span></div>
+      <div class="tags"><span class="tag infra">API</span><span class="tag active">ACTIVE</span></div>
+      <div class="desc">Geocoding, Places, Maps JavaScript API. Used by dental scraper, local business tools, real estate agent. Pay-per-use pricing.</div>
+      <div class="features">
+        <div class="feat-item">Geocoding: $5/1K requests</div>
+        <div class="feat-item">Places API: $17/1K requests (basic), $2.83/1K (advanced)</div>
+        <div class="feat-item">Maps JS: $7/1K loads</div>
+        <div class="feat-item">💡 $200/mo free credit still active on GCP? Check.</div>
+      </div>
+    </div>
+    <div class="service-card" data-tags="infra active">
+      <div class="top-row"><span class="name">Neon DB</span><span class="cost free">$0</span></div>
+      <div class="tags"><span class="tag infra">DB</span><span class="tag free-tier">FREE</span></div>
+      <div class="desc">Serverless Postgres — free tier with sufficient credits.</div>
+    </div>
+    <div class="service-card" data-tags="infra closed">
+      <div class="top-row"><span class="name">Google Cloud</span><span class="cost free">CLOSED</span></div>
+      <div class="tags"><span class="tag closed">CLOSED</span></div>
+      <div class="desc">Billing account closed. No longer charges. Google Maps APIs billed separately.</div>
+    </div>
+    <div class="service-card" data-tags="infra estimated">
+      <div class="top-row"><span class="name">RunPod</span><span class="cost warning">~$10/mo</span></div>
+      <div class="tags"><span class="tag infra">GPU</span><span class="tag estimated">MINIMAL</span></div>
+      <div class="desc">Secondary GPU hosting. Most inference moved to MI300X.</div>
+    </div>
+    <div class="service-card" data-tags="infra free">
+      <div class="top-row"><span class="name">Cloudflare + Composio</span><span class="cost free">$0</span></div>
+      <div class="tags"><span class="tag infra">MISC</span><span class="tag free-tier">FREE</span></div>
+      <div class="desc">DNS/CDN (Cloudflare free) + Tool integration (Composio free tier).</div>
+    </div>
+  </div>
+
+  <!-- ============ DOMAINS ============ -->
+  <h2>🌐 Domains <span class="count-badge">~10 domains</span></h2>
+  <div class="service-grid">
+    <div class="service-card" data-tags="domain active">
+      <div class="top-row"><span class="name">folana.live</span><span class="cost warning">~$15/yr</span></div>
+      <div class="tags"><span class="tag domain">ACTIVE</span></div>
+      <div class="desc">Folana influencer site. 200+ episodes deployed.</div>
+    </div>
+    <div class="service-card" data-tags="domain active">
+      <div class="top-row"><span class="name">ezinfluencer360.com</span><span class="cost warning">~$15/yr</span></div>
+      <div class="tags"><span class="tag domain">ACTIVE</span></div>
+      <div class="desc">EZ Influencer 360 marketplace.</div>
+    </div>
+    <div class="service-card" data-tags="domain active">
+      <div class="top-row"><span class="name">madezmedia.com</span><span class="cost warning">~$15/yr</span></div>
+      <div class="tags"><span class="tag domain">ACTIVE</span></div>
+      <div class="desc">Primary business site. Under rebrand.</div>
+    </div>
+    <div class="service-card" data-tags="domain active">
+      <div class="top-row"><span class="name">sonicbrand.ai + others</span><span class="cost warning">~$40/yr</span></div>
+      <div class="tags"><span class="tag domain">VARIOUS</span></div>
+      <div class="desc">agentarcade.ai, sonicbrand.ai, diffnotless.com, acmi-product.vercel.app, and 3-4 more.</div>
+    </div>
+  </div>
+
+  <!-- ============ REVENUE ============ -->
+  <h2>💰 Revenue Streams</h2>
+  <div class="inline-chart" style="margin-bottom:1rem;">
+    <ul class="revenue-list">
+      <li><span>EZ Influencer 360 (Whop) — 4 tiers</span> <span class="rev-amount">~$100–200/mo</span> <span class="rev-note">$19/$49/$99/$199 · irregular sales</span></li>
+      <li><span>Square Social Stories — 7 products</span> <span class="rev-amount">~$50–100/mo</span> <span class="rev-note">$4.99–19.99 each</span></li>
+      <li><span>Square Invoice (Tashay Brown)</span> <span class="rev-amount">$800</span> <span class="rev-note">One-time · issued May 17</span></li>
+      <li><span>Square Loan Balance</span> <span class="rev-amount">$543</span> <span class="rev-note">$37.04/mo min due Jul 3</span></li>
+      <li><span>ACMI Monetization (Planned)</span> <span class="rev-amount">$0</span> <span class="rev-note">$47 Starter + $39/mo Lab — stalled, launchable</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ OPTIMIZATION ============ -->
+  <h2>🎯 Optimization Plan — Current to Desired</h2>
+
+  <div class="opt-card p0">
+    <div class="opt-header">
+      <div>
+        <span class="opt-tag p0-tag">P0 · NOW</span>
+        <span class="opt-title">🔴 Fix Card on File — Unblock $200 Overdue</span>
+      </div>
+      <span class="opt-savings">Unblocks all</span>
+    </div>
+    <div class="opt-desc">
+      <strong>Root cause:</strong> Amex ending 6347 is declining everywhere. Update payment method on Vercel, Supabase, Anthropic, OpenAI, Apple. This single fix resolves ALL overdue items (Vercel 6 retries, Supabase invoice, Claude pause, OpenAI suspension, Apple Music, Google). Priority: Vercel → Supabase → Anthropic → rest.<br>
+      <strong>Once fixed:</strong> ~$200 overdue cleared, all services resume.
+    </div>
+  </div>
+
+  <div class="opt-card p1">
+    <div class="opt-header">
+      <div>
+        <span class="opt-tag p1-tag">P1 · THIS WEEK</span>
+        <span class="opt-title">Upgrade Claude to $125 or $250/mo</span>
+      </div>
+      <span class="opt-savings">Core stack upgrade</span>
+    </div>
+    <div class="opt-desc">
+      Current subscription is PAUSED at $100/mo old plan. Claude now offers $125 Starter and $250 Max. <strong>Target: $250 Max</strong> for full fleet coding capability. $125 Starter is backup option.<br>
+      Impact: Restores claude-engineer, claude-code, claude-desktop, claude-cowork, claude-web — resuming primary coding and reasoning for the fleet.
+    </div>
+  </div>
+
+  <div class="opt-card p1">
+    <div class="opt-header">
+      <div>
+        <span class="opt-tag p1-tag">P1 · THIS WEEK</span>
+        <span class="opt-title">Upgrade Grok to Premium ($100/mo)</span>
+      </div>
+      <span class="opt-savings">Influencer upgrade</span>
+    </div>
+    <div class="opt-desc">
+      Current Grok Lite has limited rate limits. Premium unlocks higher throughput for Folana content pipeline, image gen, video gen. Critical for 200+ episode backlog.
+    </div>
+  </div>
+
+  <div class="opt-card p1">
+    <div class="opt-header">
+      <div>
+        <span class="opt-tag p1-tag">P1 · THIS WEEK</span>
+        <span class="opt-title">Upgrade Codex to Pro ($100/mo)</span>
+      </div>
+      <span class="opt-savings">Automation upgrade</span>
+    </div>
+    <div class="opt-desc">
+      Current Codex has Org account but needs Pro for full API access. Enables GPT-5.4 model for opencode-task-driver and coding automation.
+    </div>
+  </div>
+
+  <div class="opt-card p2">
+    <div class="opt-header">
+      <div>
+        <span class="opt-tag p2-tag">P2 · THIS MONTH</span>
+        <span class="opt-title">Supabase Free Tier Check + Vercel Downgrade</span>
+      </div>
+      <span class="opt-savings">-$120/mo potential</span>
+    </div>
+    <div class="opt-desc">
+      <strong>Supabase:</strong> Check actual DB size. If under 500MB, downgrade to Free tier (-$68.79).<br>
+      <strong>Vercel:</strong> Move static sites to Cloudflare Pages, downgrade to Hobby (-$68/mo).<br>
+      Combined savings: Up to $137/mo.
+    </div>
+  </div>
+
+  <div class="opt-card p2">
+    <div class="opt-header">
+      <div>
+        <span class="opt-tag p2-tag">P2 · THIS MONTH</span>
+        <span class="opt-title">Revive ACMI Monetization</span>
+      </div>
+      <span class="opt-savings">+$47+/mo revenue</span>
+    </div>
+    <div class="opt-desc">
+      Work item stalled 717h. All assets ready. Just needs Whop product publish + webhook setup. $47 Starter Kit one-time + $39/mo Lab subscription. Even 1-2 sales/mo covers $80-100 of burn.
+    </div>
+  </div>
+
+  <div class="opt-card p3">
+    <div class="opt-header">
+      <div>
+        <span class="opt-tag p3-tag">P3 · NEXT 90</span>
+        <span class="opt-title">Full Cloudflare Migration + API Key Cleanup</span>
+      </div>
+      <span class="opt-savings">Long-term optimization</span>
+    </div>
+    <div class="opt-desc">
+      Move remaining Vercel sites to Cloudflare Workers+Pages ($0–10/mo). Consolidate 10+ duplicate FAL/11Labs/Gemini keys across 50+ .env files. Re-evaluate if all services still needed monthly.
+    </div>
+  </div>
+
+  <!-- ============ INVESTOR SUMMARY ============ -->
+  <h2>💼 Investor Summary</h2>
+  <div style="background:linear-gradient(135deg,#1a0a2e,#0d1117);border:2px solid var(--purple);border-radius:12px;padding:1.5rem;text-align:center;margin-bottom:2rem;">
+    <div style="color:var(--text2);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;">Full Fleet Stack — Monthly Ask</div>
+    <div style="font-size:3rem;font-weight:700;color:var(--purple);margin:0.5rem 0;">$715/mo</div>
+    <div style="color:var(--text2);font-size:0.85rem;max-width:600px;margin:0 auto 1rem;">
+      Includes ALL upgrades: Claude Max $250 + Grok Premium $100 + Codex Pro $100 + MiniMax $50 + Infra $80 + Misc $135
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;text-align:left;max-width:800px;margin:0 auto;">
+      <div style="background:var(--surface2);border-radius:8px;padding:1rem;border:1px solid var(--border);">
+        <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Claude Max</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--purple);">$250</div>
+        <div style="font-size:0.75rem;color:var(--text2);">Primary coding + reasoning</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:1rem;border:1px solid var(--border);">
+        <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Grok Premium</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--purple);">$100</div>
+        <div style="font-size:0.75rem;color:var(--text2);">Influencer orchestration</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:1rem;border:1px solid var(--border);">
+        <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Codex Pro</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--purple);">$100</div>
+        <div style="font-size:0.75rem;color:var(--text2);">Coding automation</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:1rem;border:1px solid var(--border);">
+        <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">MiniMax Plus</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--purple);">$50</div>
+        <div style="font-size:0.75rem;color:var(--text2);">Folana media + music</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:1rem;border:1px solid var(--border);">
+        <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Infrastructure</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--blue);">$80</div>
+        <div style="font-size:0.75rem;color:var(--text2);">Vercel + Upstash + Maps</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:1rem;border:1px solid var(--border);">
+        <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Misc Stack</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--green);">$135</div>
+        <div style="font-size:0.75rem;color:var(--text2);">Z.AI + FAL + 11Labs + Domains</div>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;color:var(--text2);font-size:0.85rem;border-top:1px solid var(--border);padding-top:1rem;">
+      Revenue offset: ~$200–400/mo (Whop + Square) → <strong style="color:var(--green);">Net burden: $315–515/mo</strong>
+    </div>
+  </div>
+
+  <div style="text-align:center;color:var(--text2);font-size:0.8rem;padding:2rem 0;border-top:1px solid var(--border);">
+    <p>Generated by Ops Center · ACMI Fleet Orchestrator · Updated June 13, 2026</p>
+    <p style="margin-top:0.3rem;">
+      Sources: Gmail cached inbox (May 11–19) · ACMI Fleet (78 agents, 275 work items) · Config files (50+ .env files)<br>
+      <a href="sonicbrand-cost-breakdown.html" style="color:var(--blue);">🎵 SonicBrand Cost Breakdown</a> · 
+      <a href="ez360-cost-breakdown.html" style="color:var(--blue);">⭐ EZ Influencer 360 Cost Breakdown</a>
+    </p>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.service-card').forEach(card => {
+      if (filter === 'all') { card.style.display = ''; return; }
+      const tags = card.dataset.tags || '';
+      card.style.display = tags.includes(filter) ? '' : 'none';
+    });
+  });
+});
+</script>
+</body>
+</html>

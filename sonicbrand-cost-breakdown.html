@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SonicBrand AI — Operational Cost Breakdown</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #14141d; --surface2: #1c1c2a; --border: #2a2a3e;
+    --text: #e0e0ee; --text2: #8888aa; --blue: #4488ff; --green: #33dd77;
+    --orange: #ff8833; --purple: #9966ff; --teal: #33ddbb; --pink: #ff66aa;
+    --red: #ff4466; --yellow: #ffcc33;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .header { background: linear-gradient(135deg,#0a0a1a,#1a0a2e,#0d1117); border-bottom:1px solid var(--border); padding:2.5rem 2rem 1.5rem; text-align:center; }
+  .header h1 { font-size:1.8rem; font-weight:700; background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .container { max-width:900px; margin:0 auto; padding:1.5rem 2rem; }
+  h2 { font-size:1.2rem; font-weight:600; margin:2rem 0 1rem; padding-bottom:0.4rem; border-bottom:1px solid var(--border); }
+  .cost-table { width:100%; border-collapse:collapse; margin-bottom:1.5rem; font-size:0.85rem; }
+  .cost-table th { text-align:left; padding:0.6rem 0.8rem; background:var(--surface2); color:var(--text2); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); }
+  .cost-table td { padding:0.6rem 0.8rem; border-bottom:1px solid var(--border); }
+  .cost-table tr:hover td { background:var(--surface2); }
+  .cost-table .amt { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
+  .cost-table .total td { font-weight:700; border-top:2px solid var(--purple); color:var(--purple); }
+  .cost-table .total .amt { color:var(--purple); }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem; }
+  .card .title { font-weight:600; margin-bottom:0.3rem; }
+  .card .desc { font-size:0.85rem; color:var(--text2); }
+  .tag { display:inline-block; font-size:0.65rem; padding:0.15rem 0.5rem; border-radius:8px; text-transform:uppercase; font-weight:600; }
+  .tag.api { background:rgba(68,136,255,0.15); color:var(--blue); border:1px solid rgba(68,136,255,0.3); }
+  .tag.ai { background:rgba(153,102,255,0.15); color:var(--purple); border:1px solid rgba(153,102,255,0.3); }
+  .tag.infra { background:rgba(51,221,187,0.15); color:var(--teal); border:1px solid rgba(51,221,187,0.3); }
+  .tag.free { background:rgba(51,221,119,0.15); color:var(--green); border:1px solid rgba(51,221,119,0.3); }
+  .nav-links { display:flex; gap:1rem; justify-content:center; margin:1.5rem 0; flex-wrap:wrap; }
+  .nav-links a { color:var(--blue); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--border); border-radius:8px; font-size:0.85rem; }
+  .nav-links a:hover { border-color:var(--blue); background:rgba(68,136,255,0.1); }
+  .summary-box { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin:1rem 0; }
+  .big-number { font-size:2rem; font-weight:700; }
+  @media (max-width:700px) { .container { padding:1rem; } .cost-table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎵 SonicBrand AI — Cost Breakdown</h1>
+  <div class="date-badge" style="color:var(--text2);font-size:0.8rem;margin-top:0.5rem;">Detailed operational costs for the SonicBrand AI platform</div>
+  <div class="nav-links">
+    <a href="index.html">📊 Dashboard</a>
+    <a href="ez360-cost-breakdown.html">⭐ EZ 360 Costs</a>
+  </div>
+</div>
+
+<div class="container">
+  
+  <div class="summary-box" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Total Monthly Operating Cost</div>
+      <div class="big-number" style="color:var(--purple);">$145–190/mo</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Revenue Potential</div>
+      <div class="big-number" style="color:var(--green);">$29–$997/mo</div>
+      <div style="font-size:0.75rem;color:var(--text2);">Starter ($29) to Premium ($997) tiers</div>
+    </div>
+  </div>
+
+  <h2>🧠 AI/LLM Costs</h2>
+  <table class="cost-table">
+    <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
+    <tr><td>Anthropic Claude</td><td>Sonic branding research, strategy, reasoning</td><td>Pay-per-use / Max</td><td class="amt">$30–50</td></tr>
+    <tr><td>MiniMax Plus</td><td>Music generation for sonic brands (music-2.6)</td><td>Fixed sub</td><td class="amt">$50</td></tr>
+    <tr><td>ElevenLabs</td><td>Voice synthesis for sonic brand demos</td><td>Creator tier</td><td class="amt">$22</td></tr>
+    <tr><td>OpenAI</td><td>Text analysis, brand voice generation</td><td>Pay-per-use</td><td class="amt">$5–15</td></tr>
+    <tr><td>FAL AI</td><td>Brand asset images, sonic visualizers</td><td>Pay-per-use</td><td class="amt">$10–20</td></tr>
+    <tr class="total"><td colspan="3" style="text-align:right;">Subtotal AI/LLM</td><td class="amt">$117–157</td></tr>
+  </table>
+
+  <h2>☁️ Infrastructure & APIs</h2>
+  <table class="cost-table">
+    <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
+    <tr><td>Vercel</td><td>Landing page, demo hosting</td><td>Hobby (shared)</td><td class="amt">$20</td></tr>
+    <tr><td>Square</td><td>Payment processing (Starter $29 / Standard $47 / Premium $997)</td><td>Processing fees: 2.9%+$0.30</td><td class="amt">$1–30</td></tr>
+    <tr><td>Gumroad</td><td>Digital product delivery</td><td>Free</td><td class="amt">$0</td></tr>
+    <tr><td>Domains (sonicbrand.ai)</td><td>Web presence</td><td>Yearly</td><td class="amt">$1.25</td></tr>
+    <tr><td>RapidAPI</td><td>Audio analysis APIs (if used)</td><td>Free/basic</td><td class="amt">$0–10</td></tr>
+    <tr class="total"><td colspan="3" style="text-align:right;">Subtotal Infrastructure</td><td class="amt">$22–61</td></tr>
+  </table>
+
+  <h2>📦 Revenue Tiers (Square)</h2>
+  <table class="cost-table">
+    <tr><th>Tier</th><th>Price</th><th>Description</th><th>Profit at 1 sale</th></tr>
+    <tr><td>Starter</td><td>$29</td><td>Sonic brand blueprint + audio demo</td><td class="amt" style="color:var(--green);">$29</td></tr>
+    <tr><td>Standard</td><td>$47</td><td>Full sonic identity package</td><td class="amt" style="color:var(--green);">$47</td></tr>
+    <tr><td>Premium</td><td>$997</td><td>Enterprise sonic brand system</td><td class="amt" style="color:var(--green);">$997</td></tr>
+  </table>
+
+  <h2>🔧 API-Level Breakdown</h2>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> MiniMax music-2.6</div>
+    <div class="desc">
+      Base plan includes unlimited music-2.6 generations. Approx 10–30 songs/month for SonicBrand. Each song takes ~15–30 seconds generation time. Included in $50 plan — unlimited usage.
+    </div>
+  </div>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> ElevenLabs TTS</div>
+    <div class="desc">
+      Creator tier: 100K characters/month for $22. Average sonic brand narration: 2,000–5,000 characters per brand. Sufficient for ~20–50 brand demos/month. Aurora voice recommended (speed 0.95 for narration).
+    </div>
+  </div>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> Claude (Sonic Strategy)</div>
+    <div class="desc">
+      Sonic brand strategy sessions: brand voice analysis, sonic identity framework, instrument selection, genre matching. Average 50K–100K tokens per brand analysis. At pay-per-use pricing ($0.015/1K input, $0.075/1K output), ~$2–5 per deep brand analysis session.
+    </div>
+  </div>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> FAL AI (Visual Assets)</div>
+    <div class="desc">
+      Brand visualizer images, sonic identity cards, waveform art. Flux-pro at $0.05/image, approx 20–50 images/month. Total ~$1–2.50 at usage. Bulk tier discounts available.
+    </div>
+  </div>
+
+  <div style="text-align:center;color:var(--text2);font-size:0.8rem;padding:2rem 0;border-top:1px solid var(--border);">
+    Updated June 13, 2026 · Part of Mad EZ Media Fleet Financials
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EZ Influencer 360 — Operational Cost Breakdown</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #14141d; --surface2: #1c1c2a; --border: #2a2a3e;
+    --text: #e0e0ee; --text2: #8888aa; --blue: #4488ff; --green: #33dd77;
+    --orange: #ff8833; --purple: #9966ff; --teal: #33ddbb; --pink: #ff66aa;
+    --red: #ff4466; --yellow: #ffcc33;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .header { background: linear-gradient(135deg,#0a0a1a,#2a1a0e,#0d1117); border-bottom:1px solid var(--border); padding:2.5rem 2rem 1.5rem; text-align:center; }
+  .header h1 { font-size:1.8rem; font-weight:700; background:linear-gradient(135deg,var(--yellow),var(--orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .container { max-width:900px; margin:0 auto; padding:1.5rem 2rem; }
+  h2 { font-size:1.2rem; font-weight:600; margin:2rem 0 1rem; padding-bottom:0.4rem; border-bottom:1px solid var(--border); }
+  .cost-table { width:100%; border-collapse:collapse; margin-bottom:1.5rem; font-size:0.85rem; }
+  .cost-table th { text-align:left; padding:0.6rem 0.8rem; background:var(--surface2); color:var(--text2); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); }
+  .cost-table td { padding:0.6rem 0.8rem; border-bottom:1px solid var(--border); }
+  .cost-table tr:hover td { background:var(--surface2); }
+  .cost-table .amt { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
+  .cost-table .total td { font-weight:700; border-top:2px solid var(--orange); color:var(--orange); }
+  .cost-table .total .amt { color:var(--orange); }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem; }
+  .card .title { font-weight:600; margin-bottom:0.3rem; }
+  .card .desc { font-size:0.85rem; color:var(--text2); }
+  .tag { display:inline-block; font-size:0.65rem; padding:0.15rem 0.5rem; border-radius:8px; text-transform:uppercase; font-weight:600; }
+  .tag.api { background:rgba(68,136,255,0.15); color:var(--blue); border:1px solid rgba(68,136,255,0.3); }
+  .tag.ai { background:rgba(153,102,255,0.15); color:var(--purple); border:1px solid rgba(153,102,255,0.3); }
+  .tag.infra { background:rgba(51,221,187,0.15); color:var(--teal); border:1px solid rgba(51,221,187,0.3); }
+  .tag.free { background:rgba(51,221,119,0.15); color:var(--green); border:1px solid rgba(51,221,119,0.3); }
+  .tag.product { background:rgba(255,204,51,0.15); color:var(--yellow); border:1px solid rgba(255,204,51,0.3); }
+  .nav-links { display:flex; gap:1rem; justify-content:center; margin:1.5rem 0; flex-wrap:wrap; }
+  .nav-links a { color:var(--blue); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--border); border-radius:8px; font-size:0.85rem; }
+  .nav-links a:hover { border-color:var(--blue); background:rgba(68,136,255,0.1); }
+  .summary-box { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin:1rem 0; }
+  .big-number { font-size:2rem; font-weight:700; }
+  @media (max-width:700px) { .container { padding:1rem; } .cost-table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⭐ EZ Influencer 360 — Cost Breakdown</h1>
+  <div class="date-badge" style="color:var(--text2);font-size:0.8rem;margin-top:0.5rem;">Detailed operational costs for the EZ Influencer 360 platform</div>
+  <div class="nav-links">
+    <a href="index.html">📊 Dashboard</a>
+    <a href="sonicbrand-cost-breakdown.html">🎵 SonicBrand Costs</a>
+  </div>
+</div>
+
+<div class="container">
+  
+  <div class="summary-box" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Total Monthly Operating Cost</div>
+      <div class="big-number" style="color:var(--orange);">$225–320/mo</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Revenue Potential</div>
+      <div class="big-number" style="color:var(--green);">$19–$199/tier</div>
+      <div style="font-size:0.75rem;color:var(--text2);">Credit packs + Premium Trio + subscriptions</div>
+    </div>
+  </div>
+
+  <h2>🧠 AI/LLM Costs</h2>
+  <table class="cost-table">
+    <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
+    <tr><td>Anthropic Claude</td><td>Content strategy, growth hacks, influencer scripts</td><td>Max $250 (shared)</td><td class="amt">$50–100</td></tr>
+    <tr><td>OpenAI / Codex</td><td>Automated content generation, repurposing</td><td>Pay-per-use / Pro $100</td><td class="amt">$25–50</td></tr>
+    <tr><td>MiniMax (image-01)</td><td>Influencer image generation (subject-ref)</td><td>Fixed sub</td><td class="amt">$25</td></tr>
+    <tr><td>FAL AI (flux-pro)</td><td>Product mockups, ad creatives</td><td>Pay-per-use</td><td class="amt">$10–20</td></tr>
+    <tr><td>ElevenLabs</td><td>Voiceover for influencer content</td><td>Creator tier</td><td class="amt">$22</td></tr>
+    <tr class="total"><td colspan="3" style="text-align:right;">Subtotal AI/LLM</td><td class="amt">$132–217</td></tr>
+  </table>
+
+  <h2>☁️ Infrastructure & APIs</h2>
+  <table class="cost-table">
+    <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
+    <tr><td>Vercel</td><td>Frontend hosting (ezinfluencer360.com)</td><td>Pro/Hobby (shared)</td><td class="amt">$20</td></tr>
+    <tr><td>Whop</td><td>Product marketplace, payment processing</td><td>0% commission (no platform fee)</td><td class="amt">$0</td></tr>
+    <tr><td>Square</td><td>Alternative payment processing</td><td>2.9%+$0.30 per transaction</td><td class="amt">$1–5</td></tr>
+    <tr><td>Supabase</td><td>User data, credit tracking, auth</td><td>Free/Pro (shared)</td><td class="amt">$0–68</td></tr>
+    <tr><td>Domains (ezinfluencer360.com)</td><td>Web presence</td><td>Yearly</td><td class="amt">$1.25</td></tr>
+    <tr><td>RapidAPI (Pinterest)</td><td>Social media API access (optional)</td><td>Basic</td><td class="amt">$0–10</td></tr>
+    <tr class="total"><td colspan="3" style="text-align:right;">Subtotal Infrastructure</td><td class="amt">$22–104</td></tr>
+  </table>
+
+  <h2>📦 Revenue Tiers (Whop)</h2>
+  <table class="cost-table">
+    <tr><th>Tier</th><th>Price</th><th>Credits</th><th>Profit per sale</th></tr>
+    <tr><td>🎯 Creator Pro</td><td>$19</td><td>250+50 credits</td><td class="amt" style="color:var(--green);">$19</td></tr>
+    <tr><td>🚀 Pro Team</td><td>$49</td><td>700+150 credits</td><td class="amt" style="color:var(--green);">$49</td></tr>
+    <tr><td>📈 Growth Studio</td><td>$99</td><td>1,650+350 credits</td><td class="amt" style="color:var(--green);">$99</td></tr>
+    <tr><td>🏢 Enterprise</td><td>$199</td><td>4,000+1,000 credits</td><td class="amt" style="color:var(--green);">$199</td></tr>
+    <tr><td>💎 Premium Trio (Monthly)</td><td>$29</td><td>Bundle access</td><td class="amt" style="color:var(--green);">$29</td></tr>
+    <tr><td>👑 Premium Trio (Lifetime)</td><td>$99</td><td>Lifetime access</td><td class="amt" style="color:var(--green);">$99</td></tr>
+  </table>
+
+  <h2>🔧 API-Level Breakdown</h2>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> Whop API</div>
+    <div class="desc">
+      Product management, plan creation, user verification, webhook handling. Free to use (no platform fee). Multiple plans configured: starter (prod_pjWLGr0NNX6sU), creator (prod_5ZoF0pmOO1NZF), premium studio (prod_zBaKdoY3jL8Lo), pro (prod_favVQOYTaZOPd). Whop webhook webhook configured at ws_cab649dda867bdc576c12fb0436389ccdea74ce6fb5f9d091e545cd92d59be18.
+    </div>
+  </div>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> Composio Social Tools</div>
+    <div class="desc">
+      Social media posting across platforms. API key: ak_xHrrW-9SrFPEC1LPv6eJ. Free tier for tool integration. Postiz (self-hosted) is DEAD — all publishing through Composio now.
+    </div>
+  </div>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> Supabase (User DB)</div>
+    <div class="desc">
+      User data, credit balance tracking, session management. 3 projects: mad-ez-os, ownerscout, tony-top-of-new-york. Primary: lzxgbyihmuodfqsqrmvl.supabase.co. $68.79/mo Pro plan — check free tier eligibility (under 500MB DB).
+    </div>
+  </div>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> MiniMax image-01</div>
+    <div class="desc">
+      Influencer image generation with subject-ref for Folana character consistency. 50 images/day included. Each image ~5-15 seconds generation. Critical for visual content pipeline.
+    </div>
+  </div>
+  <div class="card">
+    <div class="title"><span class="tag api">API</span> RapidAPI / Pinterest</div>
+    <div class="desc">
+      Pinterest API for social content distribution. Key: f9f7f7f863msh3a208f1bb0603b3p1c71bdjsnebdade6a80c8. Free/basic tier. Used for influencer content cross-posting.
+    </div>
+  </div>
+
+  <h2>📊 Cost per Unit Economics</h2>
+  <table class="cost-table">
+    <tr><th>Metric</th><th>Value</th><th class="amt">Cost</th></tr>
+    <tr><td>Influencer Image Generation</td><td>per image (MiniMax)</td><td class="amt">~$0.02</td></tr>
+    <tr><td>Voice Narration (ElevenLabs)</td><td>per minute</td><td class="amt">~$0.05</td></tr>
+    <tr><td>Text Analysis (Claude)</td><td>per 100K tokens</td><td class="amt">~$1.50</td></tr>
+    <tr><td>Music Track (MiniMax)</td><td>per generation</td><td class="amt">~$0.01</td></tr>
+    <tr><td>Product Mockup (FAL)</td><td>per image</td><td class="amt">~$0.05</td></tr>
+    <tr><td>Social Post (Composio)</td><td>per post</td><td class="amt">$0</td></tr>
+    <tr class="total"><td colspan="2" style="text-align:right;">Average content production cost (complete post)</td><td class="amt">~$0.50–1.00</td></tr>
+  </table>
+
+  <div style="text-align:center;color:var(--text2);font-size:0.8rem;padding:2rem 0;border-top:1px solid var(--border);">
+    Updated June 13, 2026 · Part of Mad EZ Media Fleet Financials
+  </div>
+</div>
+</body>
+</html>
