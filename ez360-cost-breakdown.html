@@ -3,149 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EZ Influencer 360 — Operational Cost Breakdown</title>
+<title>ACMI — EZ Influencer 360 · Cost Breakdown</title>
 <style>
   :root {
-    --bg: #0a0a0f; --surface: #14141d; --surface2: #1c1c2a; --border: #2a2a3e;
-    --text: #e0e0ee; --text2: #8888aa; --blue: #4488ff; --green: #33dd77;
-    --orange: #ff8833; --purple: #9966ff; --teal: #33ddbb; --pink: #ff66aa;
-    --red: #ff4466; --yellow: #ffcc33;
+    --paper: #faf9f5; --paper-warm: #f4f2eb; --paper-shadow: #ebe8de;
+    --ink: #1a1a1a; --ink-soft: #2c2c2a; --ink-mute: #4a4a48;
+    --ink-fade: #7a7a76; --ink-quiet: #9a9a96; --ink-rule: #d4d2cc;
+    --accent: #2d4a3e; --accent-soft: #5a7d6f; --accent-quiet: #1c3027;
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    --radius: 8px; --shadow: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 14px rgba(0,0,0,0.07);
+    --overdue: #dc2626; --overdue-bg: #fef2f2; --warn: #b45309; --warn-bg: #fef3c7;
+    --go: #16a34a; --go-bg: #dcfce7; --info: #2563eb; --info-bg: #dbeafe;
+    --upgrade: #6d28d9; --upgrade-bg: #ede9fe;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-  .header { background: linear-gradient(135deg,#0a0a1a,#2a1a0e,#0d1117); border-bottom:1px solid var(--border); padding:2.5rem 2rem 1.5rem; text-align:center; }
-  .header h1 { font-size:1.8rem; font-weight:700; background:linear-gradient(135deg,var(--yellow),var(--orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .container { max-width:900px; margin:0 auto; padding:1.5rem 2rem; }
-  h2 { font-size:1.2rem; font-weight:600; margin:2rem 0 1rem; padding-bottom:0.4rem; border-bottom:1px solid var(--border); }
-  .cost-table { width:100%; border-collapse:collapse; margin-bottom:1.5rem; font-size:0.85rem; }
-  .cost-table th { text-align:left; padding:0.6rem 0.8rem; background:var(--surface2); color:var(--text2); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); }
-  .cost-table td { padding:0.6rem 0.8rem; border-bottom:1px solid var(--border); }
-  .cost-table tr:hover td { background:var(--surface2); }
-  .cost-table .amt { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
-  .cost-table .total td { font-weight:700; border-top:2px solid var(--orange); color:var(--orange); }
-  .cost-table .total .amt { color:var(--orange); }
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem; }
-  .card .title { font-weight:600; margin-bottom:0.3rem; }
-  .card .desc { font-size:0.85rem; color:var(--text2); }
-  .tag { display:inline-block; font-size:0.65rem; padding:0.15rem 0.5rem; border-radius:8px; text-transform:uppercase; font-weight:600; }
-  .tag.api { background:rgba(68,136,255,0.15); color:var(--blue); border:1px solid rgba(68,136,255,0.3); }
-  .tag.ai { background:rgba(153,102,255,0.15); color:var(--purple); border:1px solid rgba(153,102,255,0.3); }
-  .tag.infra { background:rgba(51,221,187,0.15); color:var(--teal); border:1px solid rgba(51,221,187,0.3); }
-  .tag.free { background:rgba(51,221,119,0.15); color:var(--green); border:1px solid rgba(51,221,119,0.3); }
-  .tag.product { background:rgba(255,204,51,0.15); color:var(--yellow); border:1px solid rgba(255,204,51,0.3); }
-  .nav-links { display:flex; gap:1rem; justify-content:center; margin:1.5rem 0; flex-wrap:wrap; }
-  .nav-links a { color:var(--blue); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--border); border-radius:8px; font-size:0.85rem; }
-  .nav-links a:hover { border-color:var(--blue); background:rgba(68,136,255,0.1); }
-  .summary-box { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin:1rem 0; }
-  .big-number { font-size:2rem; font-weight:700; }
-  @media (max-width:700px) { .container { padding:1rem; } .cost-table { font-size:0.75rem; } }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{font-size:16px}
+  body{font-family:var(--font-sans);background:var(--paper);color:var(--ink);line-height:1.45;-webkit-font-smoothing:antialiased}
+  .mono{font-family:var(--font-mono)}
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(250,249,245,0.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--ink-rule);padding:0 1.5rem;height:48px;display:flex;align-items:center;justify-content:space-between}
+  .topbar-left{display:flex;align-items:center;gap:0.75rem}
+  .topbar-logo{font-family:var(--font-serif);font-weight:600;font-size:1.1rem;color:var(--accent);text-decoration:none}
+  .topbar-logo span{color:var(--ink)}
+  .topbar-badge{font-size:0.6rem;font-weight:700;padding:0.12rem 0.45rem;border-radius:3px;background:var(--accent);color:#fff;text-transform:uppercase;letter-spacing:0.5px}
+  .topbar-nav-sep{border-left:1px solid var(--ink-rule);height:18px;margin:0 0.35rem}
+  .topbar-navlink{font-size:0.75rem;color:var(--ink-fade);text-decoration:none}
+  .topbar-navlink:hover{color:var(--ink-mute)}
+  .topbar-right{display:flex;align-items:center;gap:1rem;font-size:0.75rem;color:var(--ink-fade)}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .wrap{max-width:900px;margin:0 auto;padding:1.5rem 1.5rem 3rem}
+  .page-intro{margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--ink-rule)}
+  .page-eyebrow{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;flex-wrap:wrap}
+  .eyebrow-chip{font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:0.15rem 0.55rem;border-radius:3px;background:var(--accent);color:#fff}
+  .eyebrow-text{font-size:0.72rem;color:var(--ink-fade)}
+  .page-title{font-family:var(--font-serif);font-size:1.85rem;font-weight:600;color:var(--ink);line-height:1.15;margin-bottom:0.35rem}
+  .page-title .em{color:var(--accent)}
+  .sec-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.6rem;gap:0.5rem;flex-wrap:wrap}
+  .sec-title{font-family:var(--font-serif);font-size:1.15rem;font-weight:600;color:var(--ink)}
+  .sec-sub{font-size:0.7rem;color:var(--ink-quiet)}
+  .stat-ribbon{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1.25rem}
+  .stat-card{background:#fff;border:1px solid var(--ink-rule);border-radius:var(--radius);padding:0.85rem 0.9rem;box-shadow:var(--shadow);position:relative;overflow:hidden;text-align:center}
+  .stat-card .stat-label{font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-fade);margin-bottom:0.25rem}
+  .stat-card .stat-value{font-family:var(--font-serif);font-size:1.7rem;font-weight:600;line-height:1}
+  .stat-card .stat-value.accent{color:var(--accent)}
+  .stat-card .stat-value.go{color:var(--go)}
+  .stat-card .stat-value.warn{color:var(--warn)}
+  .stat-card .stat-sub{font-family:var(--font-mono);font-size:0.65rem;color:var(--ink-quiet);margin-top:0.25rem}
+  .card{background:#fff;border:1px solid var(--ink-rule);border-radius:var(--radius);padding:1rem 1.1rem;box-shadow:var(--shadow);margin-bottom:1rem}
+  table.cost{width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:1rem}
+  table.cost th{text-align:left;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-fade);padding:0.5rem 0.7rem;border-bottom:1px solid var(--ink-rule);background:var(--paper)}
+  table.cost td{padding:0.45rem 0.7rem;border-bottom:1px solid var(--paper-shadow)}
+  table.cost tr:hover td{background:var(--paper)}
+  table.cost .amt{text-align:right;font-family:var(--font-mono);font-weight:600}
+  table.cost .total td{font-weight:700;border-top:2px solid var(--accent);color:var(--accent)}
+  table.cost .total .amt{color:var(--accent)}
+  .tag{display:inline-block;font-size:0.6rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:3px;text-transform:uppercase;letter-spacing:0.04em}
+  .tag.api{background:var(--info-bg);color:var(--info)}
+  .tag.ai{background:rgba(45,74,62,0.1);color:var(--accent)}
+  .tag.infra{background:#f5f5f4;color:#78716c;border:1px solid #e7e5e4}
+  .tag.rev{background:var(--go-bg);color:var(--go)}
+  .detail-card{background:#fff;border:1px solid var(--ink-rule);border-radius:var(--radius);padding:0.9rem 1rem;box-shadow:var(--shadow);margin-bottom:0.5rem}
+  .detail-card .dc-title{font-weight:600;font-size:0.85rem;margin-bottom:0.2rem}
+  .detail-card .dc-title .tag{vertical-align:middle;margin-right:0.35rem}
+  .detail-card .dc-desc{font-size:0.78rem;color:var(--ink-mute);line-height:1.45}
+  .footer{text-align:center;padding:1.5rem 0 0;border-top:1px solid var(--ink-rule);margin-top:2rem;font-size:0.72rem;color:var(--ink-quiet)}
+  .footer a{color:var(--accent)}
+  @media(max-width:700px){.wrap{padding:1rem}.topbar{padding:0 0.75rem}.topbar-navlink{display:none}table.cost{font-size:0.72rem}}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>⭐ EZ Influencer 360 — Cost Breakdown</h1>
-  <div class="date-badge" style="color:var(--text2);font-size:0.8rem;margin-top:0.5rem;">Detailed operational costs for the EZ Influencer 360 platform</div>
-  <div class="nav-links">
-    <a href="index.html">📊 Dashboard</a>
-    <a href="sonicbrand-cost-breakdown.html">🎵 SonicBrand Costs</a>
+<nav class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="topbar-logo">ACMI <span>· EZ360 Costs</span></a>
+    <span class="topbar-badge">Breakdown</span>
+    <span class="topbar-nav-sep"></span>
+    <a href="index.html" class="topbar-navlink">📊 Dashboard</a>
+    <a href="sonicbrand-cost-breakdown.html" class="topbar-navlink">🎵 SonicBrand Costs</a>
   </div>
-</div>
-
-<div class="container">
-  
-  <div class="summary-box" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-    <div>
-      <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Total Monthly Operating Cost</div>
-      <div class="big-number" style="color:var(--orange);">$225–320/mo</div>
-    </div>
-    <div style="text-align:right;">
-      <div style="font-size:0.7rem;color:var(--text2);text-transform:uppercase;">Revenue Potential</div>
-      <div class="big-number" style="color:var(--green);">$19–$199/tier</div>
-      <div style="font-size:0.75rem;color:var(--text2);">Credit packs + Premium Trio + subscriptions</div>
-    </div>
+  <div class="topbar-right"><span class="live-dot"></span><span>Ops Center</span></div>
+</nav>
+<div class="wrap">
+  <div class="page-intro">
+    <div class="page-eyebrow"><span class="eyebrow-chip">Cost Breakdown</span><span class="eyebrow-text">EZ Influencer 360 · Mad EZ Media</span></div>
+    <h1 class="page-title">EZ Influencer 360 <span class="em">—</span> Operational Costs</h1>
   </div>
 
-  <h2>🧠 AI/LLM Costs</h2>
-  <table class="cost-table">
-    <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
-    <tr><td>Anthropic Claude</td><td>Content strategy, growth hacks, influencer scripts</td><td>Max $250 (shared)</td><td class="amt">$50–100</td></tr>
-    <tr><td>OpenAI / Codex</td><td>Automated content generation, repurposing</td><td>Pay-per-use / Pro $100</td><td class="amt">$25–50</td></tr>
-    <tr><td>MiniMax (image-01)</td><td>Influencer image generation (subject-ref)</td><td>Fixed sub</td><td class="amt">$25</td></tr>
-    <tr><td>FAL AI (flux-pro)</td><td>Product mockups, ad creatives</td><td>Pay-per-use</td><td class="amt">$10–20</td></tr>
-    <tr><td>ElevenLabs</td><td>Voiceover for influencer content</td><td>Creator tier</td><td class="amt">$22</td></tr>
-    <tr class="total"><td colspan="3" style="text-align:right;">Subtotal AI/LLM</td><td class="amt">$132–217</td></tr>
-  </table>
+  <div class="stat-ribbon">
+    <div class="stat-card"><div class="stat-label">Total Monthly Operating</div><div class="stat-value warn">$225–320</div><div class="stat-sub">AI + infra + APIs</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue Potential</div><div class="stat-value go">$19–$199/tier</div><div class="stat-sub">Credit packs + Premium Trio</div></div>
+  </div>
 
-  <h2>☁️ Infrastructure & APIs</h2>
-  <table class="cost-table">
-    <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
-    <tr><td>Vercel</td><td>Frontend hosting (ezinfluencer360.com)</td><td>Pro/Hobby (shared)</td><td class="amt">$20</td></tr>
-    <tr><td>Whop</td><td>Product marketplace, payment processing</td><td>0% commission (no platform fee)</td><td class="amt">$0</td></tr>
-    <tr><td>Square</td><td>Alternative payment processing</td><td>2.9%+$0.30 per transaction</td><td class="amt">$1–5</td></tr>
-    <tr><td>Supabase</td><td>User data, credit tracking, auth</td><td>Free/Pro (shared)</td><td class="amt">$0–68</td></tr>
-    <tr><td>Domains (ezinfluencer360.com)</td><td>Web presence</td><td>Yearly</td><td class="amt">$1.25</td></tr>
-    <tr><td>RapidAPI (Pinterest)</td><td>Social media API access (optional)</td><td>Basic</td><td class="amt">$0–10</td></tr>
-    <tr class="total"><td colspan="3" style="text-align:right;">Subtotal Infrastructure</td><td class="amt">$22–104</td></tr>
-  </table>
-
-  <h2>📦 Revenue Tiers (Whop)</h2>
-  <table class="cost-table">
-    <tr><th>Tier</th><th>Price</th><th>Credits</th><th>Profit per sale</th></tr>
-    <tr><td>🎯 Creator Pro</td><td>$19</td><td>250+50 credits</td><td class="amt" style="color:var(--green);">$19</td></tr>
-    <tr><td>🚀 Pro Team</td><td>$49</td><td>700+150 credits</td><td class="amt" style="color:var(--green);">$49</td></tr>
-    <tr><td>📈 Growth Studio</td><td>$99</td><td>1,650+350 credits</td><td class="amt" style="color:var(--green);">$99</td></tr>
-    <tr><td>🏢 Enterprise</td><td>$199</td><td>4,000+1,000 credits</td><td class="amt" style="color:var(--green);">$199</td></tr>
-    <tr><td>💎 Premium Trio (Monthly)</td><td>$29</td><td>Bundle access</td><td class="amt" style="color:var(--green);">$29</td></tr>
-    <tr><td>👑 Premium Trio (Lifetime)</td><td>$99</td><td>Lifetime access</td><td class="amt" style="color:var(--green);">$99</td></tr>
-  </table>
-
-  <h2>🔧 API-Level Breakdown</h2>
+  <div class="sec-hdr"><span class="sec-title">🧠 AI/LLM Costs</span></div>
   <div class="card">
-    <div class="title"><span class="tag api">API</span> Whop API</div>
-    <div class="desc">
-      Product management, plan creation, user verification, webhook handling. Free to use (no platform fee). Multiple plans configured: starter (prod_pjWLGr0NNX6sU), creator (prod_5ZoF0pmOO1NZF), premium studio (prod_zBaKdoY3jL8Lo), pro (prod_favVQOYTaZOPd). Whop webhook webhook configured at ws_cab649dda867bdc576c12fb0436389ccdea74ce6fb5f9d091e545cd92d59be18.
-    </div>
-  </div>
-  <div class="card">
-    <div class="title"><span class="tag api">API</span> Composio Social Tools</div>
-    <div class="desc">
-      Social media posting across platforms. API key: ak_xHrrW-9SrFPEC1LPv6eJ. Free tier for tool integration. Postiz (self-hosted) is DEAD — all publishing through Composio now.
-    </div>
-  </div>
-  <div class="card">
-    <div class="title"><span class="tag api">API</span> Supabase (User DB)</div>
-    <div class="desc">
-      User data, credit balance tracking, session management. 3 projects: mad-ez-os, ownerscout, tony-top-of-new-york. Primary: lzxgbyihmuodfqsqrmvl.supabase.co. $68.79/mo Pro plan — check free tier eligibility (under 500MB DB).
-    </div>
-  </div>
-  <div class="card">
-    <div class="title"><span class="tag api">API</span> MiniMax image-01</div>
-    <div class="desc">
-      Influencer image generation with subject-ref for Folana character consistency. 50 images/day included. Each image ~5-15 seconds generation. Critical for visual content pipeline.
-    </div>
-  </div>
-  <div class="card">
-    <div class="title"><span class="tag api">API</span> RapidAPI / Pinterest</div>
-    <div class="desc">
-      Pinterest API for social content distribution. Key: f9f7f7f863msh3a208f1bb0603b3p1c71bdjsnebdade6a80c8. Free/basic tier. Used for influencer content cross-posting.
-    </div>
+    <table class="cost">
+      <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
+      <tr><td>Anthropic Claude</td><td>Content strategy, growth hacks, influencer scripts</td><td>Max $250 (shared)</td><td class="amt">$50–100</td></tr>
+      <tr><td>OpenAI / Codex</td><td>Automated content gen, repurposing</td><td>Pay-per-use / Pro $100</td><td class="amt">$25–50</td></tr>
+      <tr><td>MiniMax (image-01)</td><td>Influencer image gen (subject-ref)</td><td>Fixed sub</td><td class="amt">$25</td></tr>
+      <tr><td>FAL AI (flux-pro)</td><td>Product mockups, ad creatives</td><td>Pay-per-use</td><td class="amt">$10–20</td></tr>
+      <tr><td>ElevenLabs</td><td>Voiceover for influencer content</td><td>Creator tier</td><td class="amt">$22</td></tr>
+      <tr class="total"><td colspan="3" style="text-align:right;">Subtotal AI/LLM</td><td class="amt">$132–217</td></tr>
+    </table>
   </div>
 
-  <h2>📊 Cost per Unit Economics</h2>
-  <table class="cost-table">
-    <tr><th>Metric</th><th>Value</th><th class="amt">Cost</th></tr>
-    <tr><td>Influencer Image Generation</td><td>per image (MiniMax)</td><td class="amt">~$0.02</td></tr>
-    <tr><td>Voice Narration (ElevenLabs)</td><td>per minute</td><td class="amt">~$0.05</td></tr>
-    <tr><td>Text Analysis (Claude)</td><td>per 100K tokens</td><td class="amt">~$1.50</td></tr>
-    <tr><td>Music Track (MiniMax)</td><td>per generation</td><td class="amt">~$0.01</td></tr>
-    <tr><td>Product Mockup (FAL)</td><td>per image</td><td class="amt">~$0.05</td></tr>
-    <tr><td>Social Post (Composio)</td><td>per post</td><td class="amt">$0</td></tr>
-    <tr class="total"><td colspan="2" style="text-align:right;">Average content production cost (complete post)</td><td class="amt">~$0.50–1.00</td></tr>
-  </table>
+  <div class="sec-hdr"><span class="sec-title">☁️ Infrastructure & APIs</span></div>
+  <div class="card">
+    <table class="cost">
+      <tr><th>Service</th><th>Purpose</th><th>Plan</th><th class="amt">Monthly</th></tr>
+      <tr><td>Vercel</td><td>Frontend hosting (ezinfluencer360.com)</td><td>Pro/Hobby (shared)</td><td class="amt">$20</td></tr>
+      <tr><td>Whop</td><td>Product marketplace, 0% platform fee</td><td>Free</td><td class="amt">$0</td></tr>
+      <tr><td>Square</td><td>Payment processing</td><td>2.9%+$0.30/txn</td><td class="amt">$1–5</td></tr>
+      <tr><td>Supabase</td><td>User data, credit tracking, auth</td><td>Free/Pro (shared)</td><td class="amt">$0–68</td></tr>
+      <tr><td>Domains + RapidAPI</td><td>Web presence + Pinterest API</td><td>Yearly + basic</td><td class="amt">$1–11</td></tr>
+      <tr class="total"><td colspan="3" style="text-align:right;">Subtotal Infrastructure</td><td class="amt">$22–104</td></tr>
+    </table>
+  </div>
 
-  <div style="text-align:center;color:var(--text2);font-size:0.8rem;padding:2rem 0;border-top:1px solid var(--border);">
-    Updated June 13, 2026 · Part of Mad EZ Media Fleet Financials
+  <div class="sec-hdr"><span class="sec-title">📦 Revenue Tiers (Whop)</span></div>
+  <div class="card">
+    <table class="cost">
+      <tr><th>Tier</th><th>Price</th><th>Credits</th><th class="amt">Profit per sale</th></tr>
+      <tr><td>🎯 Creator Pro</td><td>$19</td><td>250+50 credits</td><td class="amt" style="color:var(--go);">$19</td></tr>
+      <tr><td>🚀 Pro Team</td><td>$49</td><td>700+150 credits</td><td class="amt" style="color:var(--go);">$49</td></tr>
+      <tr><td>📈 Growth Studio</td><td>$99</td><td>1,650+350 credits</td><td class="amt" style="color:var(--go);">$99</td></tr>
+      <tr><td>🏢 Enterprise</td><td>$199</td><td>4,000+1,000 credits</td><td class="amt" style="color:var(--go);">$199</td></tr>
+      <tr><td>💎 Premium Trio (Monthly)</td><td>$29</td><td>Bundle access</td><td class="amt" style="color:var(--go);">$29</td></tr>
+      <tr><td>👑 Premium Trio (Lifetime)</td><td>$99</td><td>Lifetime access</td><td class="amt" style="color:var(--go);">$99</td></tr>
+    </table>
+  </div>
+
+  <div class="sec-hdr"><span class="sec-title">🔧 Per-API & Unit Economics</span></div>
+
+  <div class="detail-card">
+    <div class="dc-title"><span class="tag api">API</span> Whop API</div>
+    <div class="dc-desc">Product management, plan creation, user verification, webhook handling. Free (0% platform fee). Plans: starter, creator, premium studio, pro. Webhook: ws_cab649dda867bdc576c12fb0436389ccdea74ce6fb5f9d091e545cd92d59be18.</div>
+  </div>
+  <div class="detail-card">
+    <div class="dc-title"><span class="tag api">API</span> Composio Social Tools</div>
+    <div class="dc-desc">Social posting across platforms. API key: ak_xHrrW-9SrFPEC1LPv6eJ. Free tier. Postiz (self-hosted) is DEAD — all publishing through Composio now.</div>
+  </div>
+  <div class="detail-card">
+    <div class="dc-title"><span class="tag api">API</span> Supabase (User DB)</div>
+    <div class="dc-desc">User data, credit balance tracking, session management. 3 projects. Primary mad-ez-os at lzxgbyihmuodfqsqrmvl.supabase.co. $68.79/mo Pro — check free tier eligibility.</div>
+  </div>
+  <div class="detail-card">
+    <div class="dc-title"><span class="tag api">API</span> MiniMax image-01</div>
+    <div class="dc-desc">Influencer image gen with subject-ref for Folana. 50 images/day. ~$0.02/image at plan rates. Critical for character consistency.</div>
+  </div>
+
+  <div class="sec-hdr"><span class="sec-title">📊 Cost Per Unit</span></div>
+  <div class="card">
+    <table class="cost">
+      <tr><th>Metric</th><th>Cost per</th><th class="amt">Amount</th></tr>
+      <tr><td>Influencer Image (MiniMax)</td><td>per image</td><td class="amt">~$0.02</td></tr>
+      <tr><td>Voice Narration (ElevenLabs)</td><td>per minute</td><td class="amt">~$0.05</td></tr>
+      <tr><td>Text Analysis (Claude)</td><td>per 100K tokens</td><td class="amt">~$1.50</td></tr>
+      <tr><td>Music Track (MiniMax)</td><td>per generation</td><td class="amt">~$0.01</td></tr>
+      <tr><td>Product Mockup (FAL)</td><td>per image</td><td class="amt">~$0.05</td></tr>
+      <tr><td>Social Post (Composio)</td><td>per post</td><td class="amt">$0</td></tr>
+      <tr class="total"><td colspan="2" style="text-align:right;">Avg content production cost (complete post)</td><td class="amt">~$0.50–1.00</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>Part of <a href="index.html">Mad EZ Media Fleet Financials</a> · Updated June 13, 2026</p>
   </div>
 </div>
 </body>
